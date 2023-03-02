@@ -3,6 +3,9 @@
 
 #pragma once
 
+#include <stdbool.h>
+#include <stddef.h>
+
 enum { _CMP_LESS = -1, _CMP_EQUAL = 0, _CMP_GREATER = 1 };
 
 /* Integer comparison */
@@ -20,7 +23,6 @@ static inline int map_cmp_uint(const void *arg0, const void *arg1) {
 typedef enum { RB_BLACK = 0, RB_RED = 1 } map_color_t;
 typedef struct map_node map_node_t;
 
-
 /* Left accessors */
 static inline map_node_t *rbtn_left_get(map_node_t *);
 static inline void rbtn_left_set(map_node_t *, map_node_t *);
@@ -36,7 +38,8 @@ static inline void rbtn_red_set(map_node_t *);
 static inline void rbtn_black_set(map_node_t *);
 
 /* Initializer */
-static void rbtn_new(map_node_t *);
+static map_node_t *rbtn_new(void *, void *, size_t, size_t);
+static void rbtn_delete(map_node_t *);
 
 /* Rotate */
 void rbtn_rotate_left(map_node_t *);
@@ -53,13 +56,13 @@ typedef struct {
  * Keep track of all aspects of the tree. All map functions require a pointer
  * to this struct.
  */
-struct map_internal *map_t;
+typedef struct map_internal *map_t;
 
 /* Consturctors */
-void map_new();
+void map_new(void);
 
 /* Add function */
-void map_insert();
+void map_insert(void);
 
 /* Get functions */
 void map_find(map_t, map_iter_t *, void *);
