@@ -42,8 +42,8 @@ static map_node_t *rbtn_new(void *, void *, size_t, size_t);
 static void rbtn_delete(map_node_t *);
 
 /* Rotate */
-void rbtn_rotate_left(map_node_t *);
-void rbtn_rotate_right(map_node_t *);
+static map_node_t *rbtn_rotate_left(map_node_t *);
+static map_node_t *rbtn_rotate_right(map_node_t *);
 
 /* Map iterator */
 typedef struct {

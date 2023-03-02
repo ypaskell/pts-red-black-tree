@@ -102,7 +102,17 @@ static void rbtn_delete(map_node_t *a_node) {
   free(a_node);
 }
 
-/* TODO */
 /* Rotate */
-// void rbtn_rotate_left(map_node_t*, map_node_t*);
-// void rbtn_rotate_right(map_node_t*, map_node_t*);
+static map_node_t *rbtn_rotate_left(map_node_t* a_node) {
+    map_node_t *ret = rbtn_right_get(a_node);
+    rbtn_right_set(a_node, rbtn_left_get(ret));
+    rbtn_left_set(ret, a_node);
+    return ret;
+}
+
+static map_node_t *rbtn_rotate_right(map_node_t* a_node) {
+    map_node_t *ret = rbtn_left_get(a_node);
+    rbtn_left_set(a_node, rbtn_right_get(ret));
+    rbtn_right_set(ret, a_node);
+    return ret;
+}
