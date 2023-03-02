@@ -6,6 +6,17 @@
 #include <stdbool.h>
 #include <stddef.h>
 
+// ToBe deleted ===============================================================
+/* Alignment macro */
+#if defined(__GNUC__) || defined(__clang__)
+#define __ALIGNED(x) __attribute__((aligned(x)))
+#elif defined(_MSC_VER)
+#define __ALIGNED(x) __declspec(align(x))
+#else /* unspported compilers */
+#define __ALIGNED(x)
+#endif
+// ============================================================================
+
 enum { _CMP_LESS = -1, _CMP_EQUAL = 0, _CMP_GREATER = 1 };
 
 /* Integer comparison */
@@ -21,7 +32,13 @@ static inline int map_cmp_uint(const void *arg0, const void *arg1) {
 }
 
 typedef enum { RB_BLACK = 0, RB_RED = 1 } map_color_t;
-typedef struct map_node map_node_t;
+
+/* Tree nodes */
+typedef struct map_node {
+  void *key, *data;
+  struct map_node *left;
+  struct map_node *right_red;
+} __ALIGNED(sizeof(unsigned long)) map_node_t;
 
 /* Left accessors */
 static inline map_node_t *rbtn_left_get(map_node_t *);
@@ -56,11 +73,20 @@ typedef struct {
  * Keep track of all aspects of the tree. All map functions require a pointer
  * to this struct.
  */
-typedef struct map_internal *map_t;
+typedef struct map_internal {
+  struct map_node *head;
+
+  /* Properties */
+  size_t key_size, element_size, size;
+
+  map_iter_t it_end, it_most, it_least;
+
+  int (*comparator)(const void *, const void *);
+} *map_t;
 
 /* jemalloc */
-void map_first(void);
-void map_last(void);
+static map_node_t *map_first(map_t);
+static map_node_t *map_last(map_t);
 void map_previous(void);
 void map_next(void);
 void iter(void);
