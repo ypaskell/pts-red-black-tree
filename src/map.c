@@ -85,7 +85,7 @@ static void rbtn_delete(map_node_t *a_node) {
   free(a_node);
 }
 
-/* Rotate */
+/* Internal utility macros. */
 static map_node_t *rbtn_rotate_left(map_node_t *a_node) {
   map_node_t *ret = rbtn_right_get(a_node);
   rbtn_right_set(a_node, rbtn_left_get(ret));
@@ -100,7 +100,6 @@ static map_node_t *rbtn_rotate_right(map_node_t *a_node) {
   return ret;
 }
 
-/* Internal */
 static map_node_t *map_first(map_t rbtree) {
   map_node_t *ret = rbtree->head;
   if ((ret) != NULL) {
@@ -109,6 +108,7 @@ static map_node_t *map_first(map_t rbtree) {
   }
   return ret;
 }
+
 static map_node_t *map_last(map_t rbtree) {
   map_node_t *ret = rbtree->head;
   if ((ret) != NULL) {
@@ -116,4 +116,26 @@ static map_node_t *map_last(map_t rbtree) {
     }
   }
   return ret;
+}
+
+map_t map_new(size_t s1, size_t s2, int (*cmp)(const void *, const void *)) {
+  map_t obj = malloc(sizeof(struct map_internal));
+
+  /* Set all pointers to NULL */
+  obj->head = NULL;
+
+  /* Set up all default properties */
+  obj->key_size = s1;
+  obj->element_size = s2;
+  obj->size = 0;
+
+  /* Function pointers */
+  obj->comparator = cmp;
+
+  obj->it_end.prev = obj->it_end.node = NULL;
+  obj->it_least.prev = obj->it_least.node = NULL;
+  obj->it_most.prev = obj->it_most.node = NULL;
+  obj->it_most.node = NULL;
+
+  return obj;
 }

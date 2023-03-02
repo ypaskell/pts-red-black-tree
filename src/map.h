@@ -87,8 +87,8 @@ typedef struct map_internal {
 /* jemalloc */
 static map_node_t *map_first(map_t);
 static map_node_t *map_last(map_t);
-void map_previous(void);
-void map_next(void);
+static map_node_t *map_previous(map_t, map_node_t);
+static map_node_t *map_next(map_t, map_node_t);
 void iter(void);
 void reverse_iter(void);
 
@@ -114,7 +114,7 @@ void reverse_iter(void);
  */
 
 /* Consturctors */
-void map_new(void);
+map_t map_new(size_t, size_t, int (*)(const void *, const void *));
 
 /* Add function */
 void map_insert(void);
