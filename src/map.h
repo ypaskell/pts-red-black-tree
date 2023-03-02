@@ -19,22 +19,64 @@ static inline int map_cmp_uint(const void *arg0, const void *arg1)
     return (*a < *b) ? _CMP_LESS : (*a > *b) ? _CMP_GREATER : _CMP_EQUAL;
 }
 
-
-
-typedef enum { RB_RED = 0, RB_BLACK } map_color_t;
-struct map_internal;
+typedef enum { RB_BLACK = 0, RB_RED = 1} map_color_t;
 typedef struct map_node map_node_t;
 
-void rbtn_left_get(map_node_t*);
-void rbtn_left_set(map_node_t*, map_node_t*);
+/* Constructor */
+void rbtn_new(map_node_t *);
 
-void rbtn_right_get(map_node_t*);
-void rbtn_right_set(map_node_t*, map_node_t*);
+/* Left accessors */
+static inline map_node_t* rbtn_left_get(map_node_t*);
+static inline void rbtn_left_set(map_node_t*, map_node_t*);
 
-void rbtn_color_get(map_node_t*);
-void rbtn_color_set(map_node_t*, map_color_t);
+/* Right accessors */
+static inline map_node_t* rbtn_right_get(map_node_t*);
+static inline void rbtn_right_set(map_node_t*, map_node_t*);
 
+/* Color accessors */
+static inline map_color_t rbtn_color_get(map_node_t*);
+static inline void rbtn_color_set(map_node_t*, map_color_t);
+static inline void rbtn_red_set(map_node_t*);
+static inline void rbtn_black_set(map_node_t*);
+
+/* Rotate */
 void rbtn_rotate_left(map_node_t*);
 void rbtn_rotate_right(map_node_t*);
+
+
+/* Map iterator */
+typedef struct {
+    struct map_node *prev, *node;
+    size_t count;
+} map_iter_t;
+
+/*
+ * Store access to the head node, as well as the first and last nodes.
+ * Keep track of all aspects of the tree. All map functions require a pointer
+ * to this struct.
+ */
+struct map_internal *map_t;
+
+/* Consturctors */
+void map_new();
+
+/* Add function */
+void map_insert();
+
+/* Get functions */
+void map_find(map_t, map_iter_t *, void *);
+bool map_empty(map_t);
+
+/* Remove functions */
+void map_erase();
+void map_clear();
+
+/* Deconstructors */
+void map_delete(map_t);
+
+#define map_init(key_type, element_type, __func) \
+    map_new(sizeof(key_type), sizeof(element_type), __func)
+
+#define map_iter_value(it, type) (*(type *) (it)->node->data)
 
 #endif // MAP_H
