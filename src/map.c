@@ -22,6 +22,17 @@ struct map_node {
   struct map_node *right_red;
 } __ALIGNED(sizeof(unsigned long));
 
+struct map_internal {
+    struct map_node *head;
+
+    /* Properties */
+    size_t key_size, element_size, size;
+
+    map_iter_t it_end, it_most, it_least;
+
+    int (*comparator)(const void *, const void *);
+};
+
 /* Left accessors */
 static inline map_node_t *rbtn_left_get(map_node_t *a_node) {
   return (map_node_t *)a_node->left;

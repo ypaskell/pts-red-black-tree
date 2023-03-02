@@ -58,6 +58,35 @@ typedef struct {
  */
 typedef struct map_internal *map_t;
 
+/* jemalloc */
+void map_first(void);
+void map_last(void);
+void map_previous(void);
+void map_next(void);
+void iter(void);
+void reverse_iter(void);
+
+/* rv32emu */
+/*
+ * map_r_r
+ * map_r_l
+ * map_l_r
+ * map_l_l
+ * map_fix_color
+ * map_delete_fixup
+ * map_clear_nexted
+ * map_calibrate
+ * map_new
+ * map_insert
+ * map_prev
+ * map_find
+ * map_empty
+ * map_at_end
+ * map_erase
+ * map_clear
+ * map_delete
+ */
+
 /* Consturctors */
 void map_new(void);
 
